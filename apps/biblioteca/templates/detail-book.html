@@ -1,0 +1,56 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet' type='text/css' />
+	<link rel='stylesheet' href='{% static 'biblioteca/css/detail-book.css' %}' type='text/css' />
+</head>
+<body>
+	<h1>Biblioteca</h1>
+	<nav id="menu">
+		<a href="{% url "home" %}">INICIO</a>
+		<a href="{% url "biblioteca" %}">BIBLIOTECA</a>
+		<a href="{% url "hemeroteca" %}">HEMEROTECA</a>
+	</nav>
+	{% if not user.is_authenticated %}
+	<form action="" id="form-login" method="post">
+		<span>Inicia sesión para poder hacer una reserva!</span><br />
+		<input type="email" name="email" placeholder="email" />
+		<input type="password" name="password" placeholder="contraseña" />
+        {% csrf_token %}
+		<input type="submit" value="Entrar" />
+	</form>
+    {% else %}
+        <div id="welcome">
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+        </div>
+    {% endif %}
+    <form action="" id="form-search-book">
+		<span>Realiza una búsqueda solo con el nombre del libro</span><br />
+        <input type="text" name="book-name" placeholder="Nombre del libro" />
+        <input type="submit" value="Buscar" />
+    </form>
+	<section id="container">
+        <div class="book">
+			<h3>{{ libro.titulo }}</h3>
+			<div class="card-book">
+	            <figure class="img-book">
+	            	<img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}" />
+	            </figure>
+	            <div class="data-book">
+	            	<p><span>Autor</span>{{ libro.autor }}</p>
+	            	<p><span>Editorial</span>{{ libro.editorial }}</p>
+	            	<p><span>Año de publicación</span>{{ libro.fechaPublicacion }}</p>
+	            	<p><span>Cant. copias</span>{{ libro.stock }}</p>
+	            	<p><span>Disponible</span>{{ libro.estado }}</p>
+	            </div>
+	            <a href="#" class="reservar">Reservar</a>
+			</div>
+        </div>
+	</section>
+	<footer id="footer"></footer>
+</body>
+</html>

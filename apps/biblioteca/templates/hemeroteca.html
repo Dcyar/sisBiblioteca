@@ -1,0 +1,59 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet' type='text/css' />
+	<link rel='stylesheet' href='{% static 'biblioteca/css/hemeroteca.css' %}' type='text/css' />
+</head>
+<body>
+	<h1>Biblioteca</h1>
+	<nav id="menu">
+		<a href="{% url "home" %}">INICIO</a>
+		<a href="{% url "biblioteca" %}">BIBLIOTECA</a>
+		<a href="{% url "hemeroteca" %}">HEMEROTECA</a>
+	</nav>
+	{% if not user.is_authenticated %}
+	<form action="" id="form-login" method="post">
+		<span>Inicia sesión para poder hacer una reserva!</span><br />
+		<input type="email" name="email" placeholder="email" />
+		<input type="password" name="password" placeholder="contraseña" />
+        {% csrf_token %}
+		<input type="submit" value="Entrar" />
+	</form>
+    {% else %}
+        <div id="welcome">
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+        </div>
+    {% endif %}
+	<section id="container">
+        <div class="book">
+			<div class="news-feed">
+				<h3>Hemeroteca</h3>
+				<div class="catalog">
+					<div class="magazines">
+						<p>REVISTAS</p>
+		                {% for revista in revistas %}
+		                <li>
+		                    <a href="{{ revista.url }}" target="_blank">{{ revista.titulo }}</a> - <span>{{ revista.autor }}</span> - <span>{{ revista.fechaPublicacion }}</span>
+		                </li>
+		                <br />
+		                {% endfor %}
+					</div>
+					<div class="articles">
+						<p>ARTÍCULOS</p>
+		                {% for articulo in articulos %}
+		                <li>
+		                    <a href="{{ articulo.url }}" target="_blank">{{ articulo.titulo }}</a> - <span>{{ articulo.autor }}</span> - <span>{{ articulo.fechaPublicacion }}</span>
+		                </li>
+		                {% endfor %}
+					</div>
+				</div>
+        	</div>
+	   </div>
+	</section>
+	<footer id="footer"></footer>
+</body>
+</html>

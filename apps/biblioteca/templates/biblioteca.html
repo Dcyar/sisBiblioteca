@@ -1,0 +1,72 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet' type='text/css' />
+	<link rel='stylesheet' href='{% static 'biblioteca/css/library.css' %}' type='text/css' />
+</head>
+<body>
+	<h1>Biblioteca</h1>
+	<nav id="menu">
+		<a href="{% url "home" %}">INICIO</a>
+		<a href="{% url "biblioteca" %}">BIBLIOTECA</a>
+		<a href="{% url "hemeroteca" %}">HEMEROTECA</a>
+	</nav>
+	{% if not user.is_authenticated %}
+	<form action="" id="form-login" method="post">
+		<span>Inicia sesión para poder hacer una reserva!</span><br />
+		<input type="email" name="email" placeholder="email" />
+		<input type="password" name="password" placeholder="contraseña" />
+        {% csrf_token %}
+		<input type="submit" value="Entrar" />
+	</form>
+    {% else %}
+        <div id="welcome">
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+        </div>
+    {% endif %}
+    <form action="" id="form-search-book">
+		<span>Realiza una búsqueda solo con el nombre del libro</span><br />
+        <input type="text" name="book-name" placeholder="Nombre del libro" />
+        <input type="submit" value="Buscar" />
+    </form>
+	<section id="container">
+        <div class="careers">
+			<h3>Carreras</h3>
+            {% for carrera in carreras %}
+                <a href="{% url 'biblioteca_carrera' carrera.id %}" class="careers-son">{{ carrera.carrera }}</a>
+            {% endfor %}
+        </div>
+        <div class="news-feed">
+			<h3>Disfruta nuestro contenido</h3>
+			<div class="catalog">
+				{% for libro in libros %}
+	            <li>
+	            	<a href="{% url 'book_detail_view' libro.id %}"><img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}" /></a>
+	                <a href="{% url 'book_detail_view' libro.id %}">{{ libro.titulo }}</a><span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+	            </li>
+	            {% endfor %}
+			</div>
+			<!-- <div class="pagination">
+			    <span class="step-links">
+			        {% if libro.has_previous %}
+			            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+			        {% endif %}
+
+			        <span class="current">
+			            Page {{ libro.number }} of {{ libro.paginator.num_pages }}.
+			        </span>
+
+			        {% if libro.has_next %}
+			            <a href="?page={{ libro.next_page_number }}">next</a>
+			        {% endif %}
+			    </span>
+			</div> -->
+        </div>
+	</section>
+	<footer id="footer"></footer>
+</body>
+</html>

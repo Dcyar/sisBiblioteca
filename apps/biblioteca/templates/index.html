@@ -1,0 +1,92 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<title>Biblioteca</title>
+	<link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet' type='text/css' />
+	<link rel='stylesheet' href="{% static 'biblioteca/css/main.css' %}" type='text/css' />
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="{% static 'biblioteca/js/responsiveslides.min.js' %}"></script>
+</head>
+<body>
+	<h1>Biblioteca</h1>
+	<nav id="menu">
+		<a href="{% url "home" %}">INICIO</a>
+		<a href="{% url "biblioteca" %}">BIBLIOTECA</a>
+		<a href="{% url "hemeroteca" %}">HEMEROTECA</a>
+	</nav>
+	<div id="slider">
+		<ul class="rslides">
+          <li><img src="{% static 'biblioteca/img/slider/1.jpg' %}" alt="slider 1"></li>
+          <li><img src="{% static 'biblioteca/img/slider/2.jpg' %}" alt="slider 2"></li>
+          <li><img src="{% static 'biblioteca/img/slider/3.jpg' %}" alt="slider 3"></li>
+        </ul>
+	</div>
+    {% if not user.is_authenticated %}
+	<form action="" id="form-login" method="post">
+		<span>Inicia sesión para poder hacer una reserva!</span><br />
+		<input type="email" name="email" placeholder="email" />
+		<input type="password" name="password" placeholder="contraseña" />
+        {% csrf_token %}
+		<input type="submit" value="Entrar" />
+	</form>
+    {% else %}
+        <div id="welcome">
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+        </div>
+    {% endif %}
+    <form action="" id="form-search-book">
+		<span>Realiza una búsqueda solo con el nombre del libro</span><br />
+        <input type="text" name="book-name" placeholder="Nombre del libro" />
+        <input type="submit" value="Buscar" />
+    </form>
+	<section id="container">
+        <div class="careers">
+			<h3>Carreras</h3>
+            {% for carrera in carreras %}
+                <a href="{% url 'biblioteca_carrera' carrera.id %}" class="careers-son">{{ carrera.carrera }}</a>
+            {% endfor %}
+        </div>
+        <div class="news-feed">
+			<h3>Nuevos libros en la biblioteca</h3>
+            {% for libro in libros %}
+            <li>
+                <a href="{% url 'book_detail_view' libro.id %}">{{ libro.titulo }}</a> - <span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+            </li>
+            {% endfor %}
+        </div>
+		<div class="prev-hemeroteca">
+			<h3>Hemeroteca</h3>
+			<div class="prev-magazines">
+				<p>REVISTAS NUEVAS</p>
+                {% for revista in revistas %}
+                <li>
+                    <a href="{{ revista.url }}" target="_blank">{{ revista.titulo }}</a> - <span>{{ revista.autor }}</span> - <span>{{ revista.fechaPublicacion }}</span>
+                </li>
+                {% endfor %}
+			</div>
+			<div class="prev-articles">
+				<p>ARTÍCULOS NUEVOS</p>
+                {% for articulo in articulos %}
+                <li>
+                    <a href="{{ articulo.url }}" target="_blank">{{ articulo.titulo }}</a> - <span>{{ articulo.autor }}</span> - <span>{{ articulo.fechaPublicacion }}</span>
+                </li>
+                {% endfor %}
+			</div>
+		</div>
+	</section>
+	<footer id="footer"></footer>
+
+    <script>
+        $(function() {
+            $(".rslides").responsiveSlides({
+                speed: 2000,
+                timeout: 3000
+            });
+        });
+    </script>
+</body>
+</html>
