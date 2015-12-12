@@ -25,7 +25,7 @@
 	</form>
     {% else %}
         <div id="welcome">
-            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.username }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
         </div>
     {% endif %}
 	<section id="container">

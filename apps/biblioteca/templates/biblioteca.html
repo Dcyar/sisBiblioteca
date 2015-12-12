@@ -25,7 +25,7 @@
 	</form>
     {% else %}
         <div id="welcome">
-            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.username }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
         </div>
     {% endif %}
     <form action="" id="form-search-book">
@@ -44,10 +44,17 @@
 			<h3>Disfruta nuestro contenido</h3>
 			<div class="catalog">
 				{% for libro in libros %}
-	            <li>
-	            	<a href="{% url 'book_detail_view' libro.id %}"><img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}" /></a>
-	                <a href="{% url 'book_detail_view' libro.id %}">{{ libro.titulo }}</a><span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+				{% if not user.is_authenticated %}
+                <li>
+	            	<a href="{% url 'book_detail_view' libro.id 1 %}"><img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}" /></a>
+	                <a href="{% url 'book_detail_view' libro.id 1 %}">{{ libro.titulo }}</a><span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
 	            </li>
+                {% else %}
+                <li>
+	            	<a href="{% url 'book_detail_view' libro.id user.id %}"><img src="{{ libro.imagen.url }}" alt="{{ libro.titulo }}" /></a>
+	                <a href="{% url 'book_detail_view' libro.id user.id %}">{{ libro.titulo }}</a><span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+	            </li>
+                {% endif%}
 	            {% endfor %}
 			</div>
 			<!-- <div class="pagination">

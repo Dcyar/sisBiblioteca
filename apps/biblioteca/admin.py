@@ -16,13 +16,13 @@ class modelEditorial(admin.ModelAdmin):
 class modelLibro(admin.ModelAdmin):
 	list_display = ('titulo', 'autor', 'editorial', 'fechaPublicacion', 'edicion', 'area', 'imagen', 'estado',)
 	list_filter = ('autor', 'editorial', 'area')
-	# list_editable = ('estado',)
+	list_editable = ('estado',)
 	search_fields = ('titulo', 'autor__nombre',)
 	raw_id_fields = ('autor',)
 
 
 class modelEstudiante(admin.ModelAdmin):
-	list_display = ('nombre', 'apellido', 'carrera', 'celular', 'dni', 'sexo', 'direccion', 'fecIngreso', 'estado', )
+	list_display = ('nombre', 'apellido', 'carrera','celular', 'dni', 'sexo', 'direccion', 'fecIngreso', 'reservas', 'prestamos', )
 	list_filter = ('carrera', 'fecIngreso', 'sexo',)
 	search_fields = ('apellido',)
 	raw_id_fields = ('carrera',)

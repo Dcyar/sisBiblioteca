@@ -35,7 +35,7 @@
 	</form>
     {% else %}
         <div id="welcome">
-            <h3 class="user"><span>Bienvenid</span> <span>{{ user.first_name }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
+            <h3 class="user"><span>Bienvenid</span> <span>{{ user.username }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
         </div>
     {% endif %}
     <form action="" id="form-search-book">
@@ -54,7 +54,12 @@
 			<h3>Nuevos libros en la biblioteca</h3>
             {% for libro in libros %}
             <li>
-                <a href="{% url 'book_detail_view' libro.id %}">{{ libro.titulo }}</a> - <span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'book_detail_view' libro.id 1 %}">{{ libro.titulo }}</a> - <span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+                {% else %}
+                <a href="{% url 'book_detail_view' libro.id user.id %}">{{ libro.titulo }}</a> - <span>{{ libro.autor.nombre }}</span><span>{{ libro.autor.apellido }}</span>
+                {% endif%}
+                
             </li>
             {% endfor %}
         </div>

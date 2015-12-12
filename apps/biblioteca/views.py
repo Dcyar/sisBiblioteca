@@ -1,11 +1,15 @@
+import uuid
+
 from django.template.context import RequestContext
 from django.shortcuts import render, redirect, render_to_response, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.contrib.auth.models import User
+
 from apps.hemeroteca.models import Articulo, Revista
-from .models import Libro, Carrera
+from .models import Libro, Carrera, Estudiante, Reserva
 from apps.userprofile.form import EmailAuthenticationForm
 # Create your views here.
 
@@ -29,19 +33,6 @@ def biblioteca(request):
 	libros	  = Libro.objects.order_by("-id").all()[:10]
 	
 	formAuth  = EmailAuthenticationForm(request.POST or None)
-
-	paginator = Paginator(libros, 1)
-
-	page = request.GET.get('page')
-
-	try:
-		libro = paginator.page(page)
-	except PageNotAnInteger:
-		# If page is not an integer, deliver first page.
-		libro = paginator.page(1)
-	except EmptyPage:
-		# If page is out of range (e.g. 9999), deliver last page of results.
-		libro = paginator.page(paginator.num_pages)
 
 	if formAuth.is_valid():
 		login(request, formAuth.get_user())
@@ -72,14 +63,51 @@ def hemeroteca(request):
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
 
 
-def book_detail_view(request, id):
-
-	libro = get_object_or_404(Libro, id = id)
+def book_detail_view(request, id_book, id_user):
+	libro = get_object_or_404(Libro, id = id_book)
+	estudent  = Estudiante.objects.get(id = id_user)
 
 	formAuth  = EmailAuthenticationForm(request.POST or None)
 
 	if formAuth.is_valid():
 		login(request, formAuth.get_user())
+
+	template = 'detail-book.html'
+	return render_to_response(template, context_instance = RequestContext(request,locals()))
+
+
+def reserva(request, id_book, id_user):
+	libro  = Libro.objects.get(id = id_book)
+	estudent = Estudiante.objects.get(id = id_user)
+	usuario = User.objects.get(id = id_user)
+
+
+
+	def my_random_string(string_length=10):
+	    """Returns a random string of length string_length."""
+	    random = str(uuid.uuid4()) # Convert UUID format to a Python string.
+	    random = random.upper() # Make all characters uppercase.
+	    random = random.replace("-","") # Remove the UUID '-'.
+	    codigo = random[0:string_length]
+	    return codigo # Return the random string.
+
+	codres = my_random_string(6)
+	res = Reserva()
+	res.reserva = codres
+	res.libro = libro
+	res.estudiante = estudent
+	res.save()
+	reserva = Reserva.objects.get(reserva = codres)
+
+	estudent.reservas = True
+	estudent.save()
+
+	libro.stockChange = libro.stockChange - 1
+	if libro.stockChange == 0:
+		libro.estado = False
+
+	libro.save()
+
 
 	template = 'detail-book.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))

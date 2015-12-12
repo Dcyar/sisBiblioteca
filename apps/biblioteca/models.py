@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Autor(models.Model):
@@ -36,7 +36,9 @@ class Libro(models.Model):
 	edicion 		 = models.CharField(max_length = 50)
 	area			 = models.CharField(max_length = 50)
 	imagen			 = models.ImageField(upload_to = 'libro')
-	stock			 = models.PositiveIntegerField()
+	stock 			 = models.PositiveIntegerField() 
+	stockChange 	 = models.PositiveIntegerField()
+
 	estado 			 = models.BooleanField(default = True)
 
 	autor 	  = models.ForeignKey(Autor)
@@ -54,19 +56,19 @@ class Estudiante(models.Model):
 	dni 	   = models.CharField(max_length = 8)
 	sexo	   = models.CharField(max_length = 1)
 	direccion  = models.CharField(max_length = 50)
-	correo	   = models.EmailField()
 	fecIngreso = models.CharField(max_length = 10)
-	estado	   = models.BooleanField(default = True)
-	prestamos   = models.BooleanField(default = False)
+	reservas    = models.BooleanField(default = False)
+	prestamos  = models.BooleanField(default = False)
 
 	carrera = models.ForeignKey(Carrera)
+	usuario = models.ForeignKey(User)
 
 	def __str__(self):
 		return "%s %s" % (self.nombre , self.apellido)
 
 
 class Reserva(models.Model):
-	reserva 	 = models.CharField(max_length = 8, unique = True)
+	reserva 	 = models.CharField(max_length = 6, unique = True)
 	fechaReserva = models.DateTimeField(auto_now_add = True)
 	estado 		 = models.BooleanField(default = True)
 
