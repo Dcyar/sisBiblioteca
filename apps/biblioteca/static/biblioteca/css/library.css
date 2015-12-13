@@ -165,14 +165,31 @@ h1 {
   color: #6c6c6c;
   font-size: 0.8em;
 }
+#container .news-feed .pagination{
+  border-top: 3px solid #ffb545;
+  padding: .7em;
+  text-align: center;
+}
+#container .news-feed .pagination .step-links a{
+  background-color: #ffb545;
+  color: #FFF4E3;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-decoration: none;
+}
+#container .news-feed .pagination .step-links a{
+  border-radius: 5px;
+  padding: .3em;
+}
+#container .news-feed .pagination .step-links .current{
+  margin: 0 .5em;
+}
 #container .careers,
-#container .news-feed,
-#container .prev-hemeroteca {
+#container .news-feed {
   border: 1px solid #6c6c6c;
 }
 #container .careers h3,
-#container .news-feed h3,
-#container .prev-hemeroteca h3 {
+#container .news-feed h3 {
   background-color: #00914c;
   color: #fff;
   font-size: 1.8em;

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 class Autor(models.Model):
@@ -38,12 +39,18 @@ class Libro(models.Model):
 	imagen			 = models.ImageField(upload_to = 'libro')
 	stock 			 = models.PositiveIntegerField() 
 	stockChange 	 = models.PositiveIntegerField()
+	slug			 = models.SlugField(editable = False)
 
 	estado 			 = models.BooleanField(default = True)
 
 	autor 	  = models.ForeignKey(Autor)
 	editorial = models.ForeignKey(Editorial)
 	carrera   = models.ForeignKey(Carrera)
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			self.slug = slugify(self.titulo)
+		super(Libro, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.titulo

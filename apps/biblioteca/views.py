@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 
 from apps.hemeroteca.models import Articulo, Revista
 from .models import Libro, Carrera, Estudiante, Reserva
+
 from apps.userprofile.form import EmailAuthenticationForm
 # Create your views here.
 
@@ -30,12 +31,19 @@ def home(request):
 
 def biblioteca(request):
 	carreras  = Carrera.objects.all()
-	libros	  = Libro.objects.order_by("-id").all()[:10]
-	
-	formAuth  = EmailAuthenticationForm(request.POST or None)
+	libros_list	  = Libro.objects.order_by("-id").all()
 
-	if formAuth.is_valid():
-		login(request, formAuth.get_user())
+	paginator = Paginator(libros_list, 1) # Show 25 contacts per page
+
+	page = request.GET.get('page')
+	try:
+		libros = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		libros = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		libros = paginator.page(paginator.num_pages)
 
 	template = 'biblioteca.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))
@@ -44,7 +52,19 @@ def biblioteca(request):
 def biblioteca_carrera(request, id_carrera):
 	carreras  = Carrera.objects.all()
 	carrera   = Carrera.objects.get(id = id_carrera)
-	libros	  = Libro.objects.filter(carrera = carrera)
+	libros_list	  = Libro.objects.filter(carrera = carrera)
+
+	paginator = Paginator(libros_list, 1) # Show 25 contacts per page
+
+	page = request.GET.get('page')
+	try:
+		libros = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		libros = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		libros = paginator.page(paginator.num_pages)
 
 	template = 'biblioteca.html'
 	return render_to_response(template, context_instance = RequestContext(request,locals()))

@@ -57,21 +57,21 @@
                 {% endif%}
 	            {% endfor %}
 			</div>
-			<!-- <div class="pagination">
+			{% if libros.paginator.num_pages > 1 %}
+			<div class="pagination">
 			    <span class="step-links">
-			        {% if libro.has_previous %}
-			            <a href="?page={{ contacts.previous_page_number }}">previous</a>
+			        {% if libros.has_previous %}
+			            <a href="?page={{ libros.previous_page_number }}"><</a>
 			        {% endif %}
-
 			        <span class="current">
-			            Page {{ libro.number }} of {{ libro.paginator.num_pages }}.
+			            {{ libros.number }} de {{ libros.paginator.num_pages }}
 			        </span>
-
-			        {% if libro.has_next %}
-			            <a href="?page={{ libro.next_page_number }}">next</a>
+			        {% if libros.has_next %}
+			            <a href="?page={{ libros.next_page_number }}">></a>
 			        {% endif %}
 			    </span>
-			</div> -->
+			</div>
+			{% endif %}
         </div>
 	</section>
 	<footer id="footer"></footer>

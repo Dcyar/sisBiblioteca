@@ -38,7 +38,7 @@
             <h3 class="user"><span>Bienvenid</span> <span>{{ user.username }}</span></h3><a href="{% url "logout" %}" class="logout">Cerrar sesión</a>
         </div>
     {% endif %}
-    <form action="" id="form-search-book">
+    <form action="" id="form-search-book" method="get">
 		<span>Realiza una búsqueda solo con el nombre del libro</span><br />
         <input type="text" name="book-name" placeholder="Nombre del libro" />
         <input type="submit" value="Buscar" />

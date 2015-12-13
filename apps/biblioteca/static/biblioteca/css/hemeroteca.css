@@ -93,7 +93,7 @@ h1 {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin: 2em auto 2em;
+  margin: 2em auto 7em;
   width: 95%;
 }
 
@@ -131,7 +131,6 @@ h1 {
 }
 #container .news-feed .catalog li {
   display: block;
-  margin: 0.7em;
 }
 /* #container .news-feed .catalog li a,
 #container .news-feed .catalog li span {
@@ -151,9 +150,4 @@ h1 {
   margin: 0;
   padding: 0.8em;
   text-align: center;
-}
-#footer {
-  background-color: #2e2e2e;
-  height: 150px;
-  width: 100%;
 }
